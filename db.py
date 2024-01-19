@@ -1,17 +1,17 @@
 users = {
   '1': {
-    'email' : '1234@gmail.com',
+    'email' : 'TheresaMiller@gmail.com',
     'password': "password1"
   },
   '2' : {
-    'email': '5678@gmail.com',
+    'email': 'Blondy@gmail.com',
     'password': "password2"
   }
 }
 
-posts = {
+review = {
   '1' : {
-    'body' : 'Theresa gave me the best haircut ever!!! I highly recommend her',
+    'body' : 'Kate gave me the best haircut ever!!! I highly recommend her',
     'user_id': '1'
   },
   '2': {

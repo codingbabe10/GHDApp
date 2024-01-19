@@ -16,7 +16,7 @@ class User(MethodView):
   def get(self,user_id):
     user = UserModel.query.get(user_id)
     if user:
-      print(user.posts.all())
+      print(user.reviews.all())
       return user
     else:
       abort(400, message='User not found')
@@ -79,3 +79,14 @@ class FollowUser(MethodView):
       return {'message':'user unfollowed'}
     else:
       return {'message':'invalid user'}, 400
+    
+
+
+#     @bp.post('/login')
+# @bp.arguments(UserLogin)
+# def login(user_data):
+#   user = UserModel.query.filter_by(username = user_data['username']).first()
+#   if user and user.check_password(user_data['password']):
+#     access_token = create_access_token(user.id)
+#     return {'token': access_token}
+#   return {'message': 'Invalid user data'}

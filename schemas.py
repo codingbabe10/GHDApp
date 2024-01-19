@@ -12,13 +12,13 @@ class UserLogin(Schema):
   username = fields.Str(required = True)
   password = fields.Str(required = True, load_only = True )
 
-class PostSchema(Schema):
+class ReviewSchema(Schema):
   id = fields.Str(dump_only = True)
   body = fields.Str(required = True)
   timestamp = fields.DateTime(dump_only = True)
 
-class PostSchemaNested(PostSchema):
+class ReviewSchemaNested(ReviewSchema):
   user = fields.Nested(UserSchema, dump_only = True)
 
 class UserSchemaNested(UserSchema):
-  posts = fields.List(fields.Nested(PostSchema), dump_only=True)
+  reviews = fields.List(fields.Nested(ReviewSchema), dump_only=True)

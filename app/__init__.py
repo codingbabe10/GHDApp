@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 
-from Config import Config
+from config import Config
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -14,11 +14,11 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 jwt = JWTManager(app)
 
-from models.user_model import UserModel
-from models import PostModel, UserModel
+from models.user_model import UserModel, ReviewModel
+# from models import ReviewModel, UserModel
 
 from resources.user import bp as user_bp
 api.register_blueprint(user_bp)
 
-from resources.post import bp as post_bp
-api.register_blueprint(post_bp)
+from resources.review import bp as Review_bp
+api.register_blueprint(Review_bp)

@@ -25,7 +25,7 @@ class UserModel(db.Model):
                             secondaryjoin = followers.c.followed_id == id,
                             backref = db.backref('followers', lazy = 'dynamic')
                             )
-  posts = db.relationship('PostModel',back_populates ='user', lazy='dynamic', cascade= 'all, delete')
+  reviewss = db.relationship('ReviewModel',back_populates ='user', lazy='dynamic', cascade= 'all, delete')
   
   def __repr__(self):
     return f'<User: {self.username}>'
@@ -62,18 +62,18 @@ class UserModel(db.Model):
       return
     self.followed.remove(user)
 
-class PostModel(db.Model):
+class ReviewModel(db.Model):
 
-  __tablename__ = 'posts'
+  __tablename__ = 'reviews'
 
   id = db.Column(db.Integer, primary_key = True)
   body = db.Column(db.String, nullable = False)
   timestamp = db.Column(db.DateTime, default = datetime.utcnow)
   user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable = False)
-  user = db.relationship('UserModel', back_populates = 'posts')
+  user = db.relationship('UserModel', back_populates = 'reviews')
 
   def __repr__(self):
-    return f'<Post: {self.body}>'
+    return f'<Review: {self.body}>'
   
   def commit(self):
     db.session.add(self)
