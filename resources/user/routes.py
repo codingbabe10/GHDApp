@@ -1,22 +1,25 @@
-from flask import request
-
 from flask.views import MethodView
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from flask_smorest import abort
 from . import bp
 
 from schemas import UserSchema, UserSchemaNested
-from models.user_model import UserModel
+from models import UserModel
 # user routes
 
 @bp.route('/user/<user_id>')
 class User(MethodView):
 
   @bp.response(200, UserSchemaNested)
-  def get(self,user_id):
-    user = UserModel.query.get(user_id)
+  def get(self, user_id):
+    user = None
+    print(user_id)
+    if user_id.isdigit():
+      user = UserModel.query.get(user_id)
+    if not user:
+      user = UserModel.query.filter_by(username = user_id).first()
+      print(user)
     if user:
-      print(user.reviews.all())
       return user
     else:
       abort(400, message='User not found')
@@ -46,16 +49,7 @@ class UserList(MethodView):
   def get(self):
    return UserModel.query.all()
   
-  @bp.arguments(UserSchema)
-  def post(self, user_data):
-    try: 
-      user = UserModel()
-      user.from_dict(user_data)
-      user.commit()
-      return { 'message' : f'{user_data["username"]} created' }, 201
-    except:
-      abort(400, message='Username and Email Already taken')
-      
+
 @bp.route('/user/follow/<followed_id>')
 class FollowUser(MethodView):
 
@@ -79,14 +73,3 @@ class FollowUser(MethodView):
       return {'message':'user unfollowed'}
     else:
       return {'message':'invalid user'}, 400
-    
-
-
-#     @bp.post('/login')
-# @bp.arguments(UserLogin)
-# def login(user_data):
-#   user = UserModel.query.filter_by(username = user_data['username']).first()
-#   if user and user.check_password(user_data['password']):
-#     access_token = create_access_token(user.id)
-#     return {'token': access_token}
-#   return {'message': 'Invalid user data'}

@@ -7,18 +7,21 @@ class UserSchema(Schema):
   password = fields.Str(required = True, load_only = True )
   first_name = fields.Str()
   last_name = fields.Str()
+  # token = fields.Str( load_only = True )
 
 class UserLogin(Schema):
   username = fields.Str(required = True)
   password = fields.Str(required = True, load_only = True )
 
-class ReviewSchema(Schema):
+class PostSchema(Schema):
   id = fields.Str(dump_only = True)
   body = fields.Str(required = True)
   timestamp = fields.DateTime(dump_only = True)
 
-class ReviewSchemaNested(ReviewSchema):
+class PostSchemaNested(PostSchema):
   user = fields.Nested(UserSchema, dump_only = True)
 
 class UserSchemaNested(UserSchema):
-  reviews = fields.List(fields.Nested(ReviewSchema), dump_only=True)
+  posts = fields.List(fields.Nested(PostSchema), dump_only=True)
+  # followed = fields.List(fields.Nested(UserSchema))
+  followed = fields.Function(lambda user: {followed.id: UserSchema().dump(followed) for followed in user.followed} )

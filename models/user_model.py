@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from app import db
 
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -25,7 +23,7 @@ class UserModel(db.Model):
                             secondaryjoin = followers.c.followed_id == id,
                             backref = db.backref('followers', lazy = 'dynamic')
                             )
-  reviewss = db.relationship('ReviewModel',back_populates ='user', lazy='dynamic', cascade= 'all, delete')
+  posts = db.relationship('PostModel',back_populates ='user', lazy='dynamic', cascade= 'all, delete')
   
   def __repr__(self):
     return f'<User: {self.username}>'
@@ -61,24 +59,3 @@ class UserModel(db.Model):
     if not self.is_following(user):
       return
     self.followed.remove(user)
-
-class ReviewModel(db.Model):
-
-  __tablename__ = 'reviews'
-
-  id = db.Column(db.Integer, primary_key = True)
-  body = db.Column(db.String, nullable = False)
-  timestamp = db.Column(db.DateTime, default = datetime.utcnow)
-  user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable = False)
-  user = db.relationship('UserModel', back_populates = 'reviews')
-
-  def __repr__(self):
-    return f'<Review: {self.body}>'
-  
-  def commit(self):
-    db.session.add(self)
-    db.session.commit()
-
-  def delete(self):
-    db.session.delete(self)
-    db.session.commit()

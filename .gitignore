@@ -1,2 +1,4 @@
 migrations
-venv/
+pp-venv/
+.env
+__pycache__/
