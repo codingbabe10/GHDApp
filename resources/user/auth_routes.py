@@ -8,7 +8,9 @@ from schemas import UserLogin, UserSchema
 @bp.post('/login')
 @bp.arguments(UserLogin)
 def login(user_data):
+  print(user_data)
   user = UserModel.query.filter_by(username = user_data['username']).first()
+  print(user)
   if user and user.check_password(user_data['password']):
     access_token = create_access_token(user.id)
     return {'token': access_token}
